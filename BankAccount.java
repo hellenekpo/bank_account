@@ -36,7 +36,23 @@ public class BankAccount {
         jf.setResizable(false);
         JButton [] buttons = new JButton[10];
         boolean [] toggle = new boolean[10];
-       
+        JPanel jp = new JPanel();
+        jp.setLayout(new BorderLayout(4, 2));
+        jf.add(jp);
+        jf.setVisible(true);
+        for (int i = 0; i < 10; ++i) {
+            JButton jb = new JButton("Click here");
+            Random rand = new Random();
+            float r = rand.nextFloat();
+            float g = rand.nextFloat();
+            float b = rand.nextFloat();
+            Color rand_color = new Color(r, g, b);
+            jb.setBackground(rand_color);
+            jb.setOpaque(true);
+            jb.setBorderPainted(false);
+            buttons[i] = jb;
+            jp.add(buttons[i]);
+        }
         
         
         
