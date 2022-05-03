@@ -35,11 +35,11 @@ public class BankAccount {
         JFrame jf = new JFrame("Bank Account!");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1200, 800);
-        jf.setResizable(false);
+        jf.setResizable(true);
         JButton [] buttons = new JButton[10];
         boolean [] toggle = new boolean[10];
         for (int i = 0; i < 10; ++i) {
-            JButton jb = new JButton("Click here");
+            JButton jb = new JButton("Welcome! Clock In");
             jb.setPreferredSize(new Dimension(200, 100));
             jb.setFont(new Font("monospaced", Font.BOLD, 50));
             Random rand = new Random();
@@ -63,7 +63,9 @@ public class BankAccount {
         jf.add(jp);
         jp.add(buttons[0], BorderLayout.PAGE_START);
         jp.add(buttons[1], BorderLayout.CENTER);
-        
+        jp.add(buttons[2], BorderLayout.EAST);
+        jp.add(buttons[3], BorderLayout.WEST);
+        jp.add(buttons[4], BorderLayout.PAGE_END);
         jf.setVisible(true);
        
         
