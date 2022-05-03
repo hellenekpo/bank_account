@@ -15,6 +15,12 @@ public class BankAccount {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        //implement a bank account software that would emulate a user
+        //spending money on different options, 
+        //accumulating money every so often from their job or part-time 
+        //small jobs, and then tracking the transaction information. 
+        //The three concepts we would like to use are
+        //graphics, file i/o and thread concurrency.
         System.out.println("hekllllo");
         
     }
