@@ -11,7 +11,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.Random;
-
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
 /**
  *
  * @author hellenekpo
@@ -36,23 +38,34 @@ public class BankAccount {
         jf.setResizable(false);
         JButton [] buttons = new JButton[10];
         boolean [] toggle = new boolean[10];
-        JPanel jp = new JPanel();
-        jp.setLayout(new BorderLayout(4, 2));
-        jf.add(jp);
-        jf.setVisible(true);
         for (int i = 0; i < 10; ++i) {
             JButton jb = new JButton("Click here");
+            jb.setPreferredSize(new Dimension(200, 100));
+            jb.setFont(new Font("monospaced", Font.BOLD, 50));
             Random rand = new Random();
             float r = rand.nextFloat();
+            float r1 = rand.nextFloat();
             float g = rand.nextFloat();
+            float g2 = rand.nextFloat();
             float b = rand.nextFloat();
+            float b3 = rand.nextFloat();
             Color rand_color = new Color(r, g, b);
+            Color rand_color1 = new Color(r1, g2, b3);
             jb.setBackground(rand_color);
+            jb.setForeground(rand_color1);
             jb.setOpaque(true);
             jb.setBorderPainted(false);
             buttons[i] = jb;
-            jp.add(buttons[i]);
         }
+        JPanel jp = new JPanel();
+    
+        jp.setLayout(new BorderLayout(4, 2));
+        jf.add(jp);
+        jp.add(buttons[0], BorderLayout.PAGE_START);
+        jp.add(buttons[1], BorderLayout.CENTER);
+        
+        jf.setVisible(true);
+       
         
         
         
