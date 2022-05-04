@@ -9,11 +9,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import javax.swing.SwingConstants;
 /**
  *
  * @author hellenekpo
@@ -38,10 +40,19 @@ public class BankAccount {
         jf.setResizable(true);
         JButton [] buttons = new JButton[10];
         boolean [] toggle = new boolean[10];
-        for (int i = 0; i < 10; ++i) {
-            JButton jb = new JButton("Welcome! Clock In");
-            jb.setPreferredSize(new Dimension(200, 100));
-            jb.setFont(new Font("monospaced", Font.BOLD, 50));
+        JButton jb = new JButton("Welcome! Clock In");
+        buttons[0] = jb;
+            JButton jb1 = new JButton("Clock Out");
+        buttons[1] = jb1;
+        JButton jb2 = new JButton("Pay Rent");
+        buttons[2] = jb2;
+        JButton jb3 = new JButton("Buy Food");
+        buttons[3] = jb3;
+        JButton jb4 = new JButton("Go Party");
+        buttons[4] = jb4;
+        for (int i = 0; i < 5; ++i) {
+            buttons[i].setPreferredSize(new Dimension(200, 100));
+            buttons[i].setFont(new Font("monospaced", Font.BOLD, 50));
             Random rand = new Random();
             float r = rand.nextFloat();
             float r1 = rand.nextFloat();
@@ -51,21 +62,26 @@ public class BankAccount {
             float b3 = rand.nextFloat();
             Color rand_color = new Color(r, g, b);
             Color rand_color1 = new Color(r1, g2, b3);
-            jb.setBackground(rand_color);
-            jb.setForeground(rand_color1);
-            jb.setOpaque(true);
-            jb.setBorderPainted(false);
-            buttons[i] = jb;
+            buttons[i].setBackground(rand_color);
+            buttons[i].setForeground(rand_color1);
+            buttons[i].setOpaque(true);
+            buttons[i].setBorderPainted(false);
         }
         JPanel jp = new JPanel();
-    
-        jp.setLayout(new BorderLayout(4, 2));
+        jp.setLayout(new GridLayout(4, 2));
         jf.add(jp);
-        jp.add(buttons[0], BorderLayout.PAGE_START);
-        jp.add(buttons[1], BorderLayout.CENTER);
-        jp.add(buttons[2], BorderLayout.EAST);
-        jp.add(buttons[3], BorderLayout.WEST);
-        jp.add(buttons[4], BorderLayout.PAGE_END);
+        JLabel jl = new JLabel("Hello, welcome!", SwingConstants.CENTER);
+        JLabel jl1 = new JLabel("This is your bank account!",
+                SwingConstants.CENTER);
+        jl.setFont(new Font("monospaced", Font.BOLD, 50));
+        jl1.setFont(new Font("monospaced", Font.BOLD, 30));
+        jp.add(jl);
+        jp.add(jl1);
+        jp.add(buttons[0]);
+        jp.add(buttons[1]);
+        jp.add(buttons[2]);
+        jp.add(buttons[3]);
+        jp.add(buttons[4]);
         jf.setVisible(true);
        
         
