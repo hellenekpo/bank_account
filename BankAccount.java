@@ -50,7 +50,9 @@ public class BankAccount {
         buttons[3] = jb3;
         JButton jb4 = new JButton("Go Party");
         buttons[4] = jb4;
-        for (int i = 0; i < 5; ++i) {
+        JButton jb5 = new JButton("Print Bank Statement");
+        buttons[5] = jb5
+        for (int i = 0; i < 6; ++i) {
             buttons[i].setPreferredSize(new Dimension(200, 100));
             buttons[i].setFont(new Font("monospaced", Font.BOLD, 50));
             Random rand = new Random();
@@ -82,6 +84,7 @@ public class BankAccount {
         jp.add(buttons[2]);
         jp.add(buttons[3]);
         jp.add(buttons[4]);
+        jp.add(buttons[5]);
         jf.setVisible(true);
        
         
