@@ -15,6 +15,8 @@ import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.SwingConstants;
 /**
  *
@@ -35,12 +37,17 @@ public class BankAccount {
         //graphics, file i/o and thread concurrency.
         System.out.println("hekllllo");
         int account = 0;
+        ButtonMakeMoneyThread [] threads = new ButtonMakeMoneyThread[8];
+ 
         JFrame jf = new JFrame("Bank Account!");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1200, 800);
         jf.setResizable(true);
         JButton [] buttons = new JButton[10];
         boolean [] toggle = new boolean[10];
+        for (int i = 0; i < 8; ++i) {
+            toggle[i] = true;
+        }
         JButton jb = new JButton("Welcome! Clock In");
         buttons[0] = jb;
         JButton jb1 = new JButton("Clock Out");
@@ -73,21 +80,32 @@ public class BankAccount {
         JPanel jp = new JPanel();
         jp.setLayout(new GridLayout(4, 2));
         jf.add(jp);
-        JLabel jl = new JLabel("Hello, welcome!", SwingConstants.CENTER);
-        JLabel jl1 = new JLabel("This is your bank account!",
+        JLabel [] labels = new JLabel[2];
+        labels[0] = new JLabel("Hello, welcome!", SwingConstants.CENTER);
+        labels[1] = new JLabel("This is your bank account!",
                 SwingConstants.CENTER);
-        jl.setFont(new Font("monospaced", Font.BOLD, 50));
-        jl1.setFont(new Font("monospaced", Font.BOLD, 30));
-        jp.add(jl);
-        jp.add(jl1);
+        labels[0].setFont(new Font("monospaced", Font.BOLD, 50));
+        labels[1].setFont(new Font("monospaced", Font.BOLD, 30));
+        jp.add(labels[0]);
+        jp.add(labels[1]);
         jp.add(buttons[0]);
+        buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
+                threads, account,labels[0], labels[1]));
         jp.add(buttons[1]);
+        buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
+                threads, account, labels[0], labels[1]));
+        ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
+        labels[0], labels[1]);
+        threads[0] = thread_a;
+        ButtonMakeMoneyThread thread_b = new ButtonMakeMoneyThread(buttons[0], account,
+        labels[0], labels[1]);
+        threads[1] = thread_b;
         jp.add(buttons[2]);
         jp.add(buttons[3]);
         jp.add(buttons[4]);
         jp.add(buttons[5]);
         jf.setVisible(true);
-        
+
        
         
         
@@ -99,22 +117,75 @@ public class BankAccount {
 class ButtonListen implements ActionListener {
     JButton [] buttons;
     boolean [] toggles;
-    ButtonMakeMoney make_money;
+    ButtonMakeMoneyThread [] make_money;
+    int account;
+    JLabel jl;
+    JLabel jl1;
     ButtonListen (JButton [] curr_buttons,
-            boolean [] toggle, ButtonMakeMoney makemoney) {
+            boolean [] toggle, ButtonMakeMoneyThread [] makemoney, int curr_acc,
+            JLabel curr_jl, JLabel curr_jl1) {
         buttons = curr_buttons;
         toggles = toggle;
         make_money = makemoney;
+        account = curr_acc;
+        jl = curr_jl;
+        jl1 = curr_jl1;
+    }
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        JButton curr_button = (JButton) arg0.getSource();
+        if (curr_button == buttons[0]) {
+            String account_string = String.valueOf(account);
+            jl.setText("Current balance:");
+            jl1.setText(account_string);
+            if (toggles[0] == true) {
+                System.out.println("this is going to accumulate money");
+                buttons[0].setBackground(Color.GRAY);
+                make_money[0] = new ButtonMakeMoneyThread(buttons[0], account, 
+                jl, jl1);
+                make_money[0].start();
+                toggles[0] = false;
+                toggles[1] = true;
+                Random rand = new Random();
+                float r = rand.nextFloat();
+                float g = rand.nextFloat();
+                float b = rand.nextFloat();
+                Color rand_color = new Color(r, g, b);
+                buttons[1].setBackground(rand_color);
+                //turn the button gray and call the thread to make the money
+            }
+            if (toggles[0] == false) {
+                System.out.println("its already been toggled, make the money");
+            }
+                    
+        }
+        if (curr_button == buttons[1]) {
+            if (toggles[1] == true) {
+                System.out.println("this is gonna stop it");
+                make_money[0].interrupt();
+                Random rand = new Random();
+                float r = rand.nextFloat();
+                float g = rand.nextFloat();
+                float b = rand.nextFloat();
+                Color rand_color = new Color(r, g, b);
+                buttons[0].setBackground(rand_color);
+                buttons[0].setOpaque(true);
+                toggles[1] = false;
+                toggles[0] = true;;
+                buttons[1].setBackground(Color.gray);
+                
+            }
+        }
     }
 }
 
 
-class ButtonMakeMoney extends Thread {
+class ButtonMakeMoneyThread extends Thread {
     JButton button;
     int account;
     JLabel jl;
     JLabel jl1;
-    ButtonMakeMoney(JButton curr_button, int curr_account,
+    ButtonMakeMoneyThread(JButton curr_button, int curr_account,
             JLabel curr_jl, JLabel curr_jl1) {
         button = curr_button;
         account = curr_account;
@@ -126,16 +197,42 @@ class ButtonMakeMoney extends Thread {
         do {
             try {
                 Thread.currentThread().sleep(10000);
-                account += 50;
                 String account_string = String.valueOf(account);
-                jl = new JLabel("Current balance:", SwingConstants.CENTER);
-                jl.setFont(new Font("monospaced", Font.BOLD, 50));
-                jl1 = new JLabel(account_string, SwingConstants.CENTER);
+                account += 50;
+                jl1.setText(account_string);
+                System.out.println(account);
             }
             catch (InterruptedException e) {
                 return;
             }
         }
         while (true);
+    }
+}
+
+class ThreadButton extends Thread {
+    JButton button;
+    ThreadButton(JButton curr_button) {
+        button = curr_button;
+    }
+    @Override
+    public void run() {
+            do {
+                try {
+                    Thread.currentThread().sleep(1000);
+                    Random rand = new Random();
+                    float r = rand.nextFloat();
+                    float g = rand.nextFloat();
+                    float b = rand.nextFloat();
+                    Color rand_color = new Color(r, g, b);
+                    button.setBackground(rand_color);
+                    button.setOpaque(true);
+                }
+                catch (InterruptedException e) {
+                    return;
+                }
+            }
+        while (true);
+      
     }
 }
