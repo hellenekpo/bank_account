@@ -42,7 +42,7 @@ public class BankAccount {
         boolean [] toggle = new boolean[10];
         JButton jb = new JButton("Welcome! Clock In");
         buttons[0] = jb;
-            JButton jb1 = new JButton("Clock Out");
+        JButton jb1 = new JButton("Clock Out");
         buttons[1] = jb1;
         JButton jb2 = new JButton("Pay Rent");
         buttons[2] = jb2;
@@ -51,7 +51,7 @@ public class BankAccount {
         JButton jb4 = new JButton("Go Party");
         buttons[4] = jb4;
         JButton jb5 = new JButton("Print Bank Statement");
-        buttons[5] = jb5
+        buttons[5] = jb5;
         for (int i = 0; i < 6; ++i) {
             buttons[i].setPreferredSize(new Dimension(200, 100));
             buttons[i].setFont(new Font("monospaced", Font.BOLD, 50));
@@ -92,4 +92,30 @@ public class BankAccount {
         
     }
     
+}
+
+class ButtonMakeMoney extends Thread {
+    JButton button;
+    int account;
+    JLabel jl;
+    JLabel jl1;
+    ButtonMakeMoney(JButton curr_button, int curr_account,
+            JLabel curr_jl, JLabel curr_jl1) {
+        button = curr_button;
+        account = curr_account;
+        jl = curr_jl;
+        jl1 = curr_jl1;
+    }
+    @Override
+    public void run() {
+        do {
+            try {
+                Thread.currentThread().sleep(10000);
+            }
+            catch (InterruptedException e) {
+                return;
+            }
+        }
+        while (true);
+    }
 }
