@@ -36,7 +36,9 @@ public class BankAccount {
         //The three concepts we would like to use are
         //graphics, file i/o and thread concurrency.
         System.out.println("hekllllo");
-        int account = 0;
+        int [] account = new int[1];
+        int [] transactions = new int[1000];
+        account[0] = 0;
         ButtonMakeMoneyThread [] threads = new ButtonMakeMoneyThread[8];
  
         JFrame jf = new JFrame("Bank Account!");
@@ -89,26 +91,22 @@ public class BankAccount {
         jp.add(labels[0]);
         jp.add(labels[1]);
         jp.add(buttons[0]);
-        buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
-                threads, account,labels[0], labels[1]));
         jp.add(buttons[1]);
-        buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
-                threads, account, labels[0], labels[1]));
-        ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
-        labels[0], labels[1]);
-        threads[0] = thread_a;
-        ButtonMakeMoneyThread thread_b = new ButtonMakeMoneyThread(buttons[0], account,
-        labels[0], labels[1]);
-        threads[1] = thread_b;
         jp.add(buttons[2]);
         jp.add(buttons[3]);
         jp.add(buttons[4]);
         jp.add(buttons[5]);
         jf.setVisible(true);
-
-       
-        
-        
+        buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
+                threads, account,labels[0], labels[1]));
+        buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
+                threads, account, labels[0], labels[1]));
+        ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
+                labels[0], labels[1]);
+        threads[0] = thread_a;
+        ButtonMakeMoneyThread thread_b = new ButtonMakeMoneyThread(buttons[0], account,
+                labels[0], labels[1]);
+        threads[1] = thread_b;
         
     }
     
@@ -118,11 +116,11 @@ class ButtonListen implements ActionListener {
     JButton [] buttons;
     boolean [] toggles;
     ButtonMakeMoneyThread [] make_money;
-    int account;
+    int [] account;
     JLabel jl;
     JLabel jl1;
     ButtonListen (JButton [] curr_buttons,
-            boolean [] toggle, ButtonMakeMoneyThread [] makemoney, int curr_acc,
+            boolean [] toggle, ButtonMakeMoneyThread [] makemoney, int [] curr_acc,
             JLabel curr_jl, JLabel curr_jl1) {
         buttons = curr_buttons;
         toggles = toggle;
@@ -133,9 +131,10 @@ class ButtonListen implements ActionListener {
     }
     @Override
     public void actionPerformed(ActionEvent arg0) {
+        System.out.println(account[0]);
         JButton curr_button = (JButton) arg0.getSource();
         if (curr_button == buttons[0]) {
-            String account_string = String.valueOf(account);
+            String account_string = String.valueOf(account[0]);
             jl.setText("Current balance:");
             jl1.setText(account_string);
             if (toggles[0] == true) {
@@ -156,12 +155,13 @@ class ButtonListen implements ActionListener {
             }
             if (toggles[0] == false) {
                 System.out.println("its already been toggled, make the money");
-            }
-                    
+            }        
         }
         if (curr_button == buttons[1]) {
             if (toggles[1] == true) {
                 System.out.println("this is gonna stop it");
+                System.out.println("this is the current status after it stops" + make_money[0].get_Account());
+                account[0] = make_money[0].get_Account();
                 make_money[0].interrupt();
                 Random rand = new Random();
                 float r = rand.nextFloat();
@@ -171,9 +171,8 @@ class ButtonListen implements ActionListener {
                 buttons[0].setBackground(rand_color);
                 buttons[0].setOpaque(true);
                 toggles[1] = false;
-                toggles[0] = true;;
-                buttons[1].setBackground(Color.gray);
-                
+                toggles[0] = true;
+                buttons[1].setBackground(Color.gray);   
             }
         }
     }
@@ -182,10 +181,10 @@ class ButtonListen implements ActionListener {
 
 class ButtonMakeMoneyThread extends Thread {
     JButton button;
-    int account;
+    int [] account;
     JLabel jl;
     JLabel jl1;
-    ButtonMakeMoneyThread(JButton curr_button, int curr_account,
+    ButtonMakeMoneyThread(JButton curr_button, int [] curr_account,
             JLabel curr_jl, JLabel curr_jl1) {
         button = curr_button;
         account = curr_account;
@@ -196,17 +195,20 @@ class ButtonMakeMoneyThread extends Thread {
     public void run() {
         do {
             try {
-                Thread.currentThread().sleep(10000);
-                String account_string = String.valueOf(account);
-                account += 50;
+                Thread.currentThread().sleep(5000);
+                String account_string = String.valueOf(account[0]);
+                account[0] += 50;
                 jl1.setText(account_string);
-                System.out.println(account);
+                System.out.println(account[0]);
             }
             catch (InterruptedException e) {
                 return;
             }
         }
         while (true);
+    }
+    public int get_Account() {
+        return account[0];
     }
 }
 
