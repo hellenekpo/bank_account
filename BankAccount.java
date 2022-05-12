@@ -34,6 +34,7 @@ public class BankAccount {
         //The three concepts we would like to use are
         //graphics, file i/o and thread concurrency.
         System.out.println("hekllllo");
+        int account = 0;
         JFrame jf = new JFrame("Bank Account!");
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1200, 800);
@@ -86,6 +87,7 @@ public class BankAccount {
         jp.add(buttons[4]);
         jp.add(buttons[5]);
         jf.setVisible(true);
+        
        
         
         
@@ -93,6 +95,19 @@ public class BankAccount {
     }
     
 }
+
+class ButtonListen implements ActionListener {
+    JButton [] buttons;
+    boolean [] toggles;
+    ButtonMakeMoney make_money;
+    ButtonListen (JButton [] curr_buttons,
+            boolean [] toggle, ButtonMakeMoney makemoney) {
+        buttons = curr_buttons;
+        toggles = toggle;
+        make_money = makemoney;
+    }
+}
+
 
 class ButtonMakeMoney extends Thread {
     JButton button;
@@ -111,6 +126,11 @@ class ButtonMakeMoney extends Thread {
         do {
             try {
                 Thread.currentThread().sleep(10000);
+                account += 50;
+                String account_string = String.valueOf(account);
+                jl = new JLabel("Current balance:", SwingConstants.CENTER);
+                jl.setFont(new Font("monospaced", Font.BOLD, 50));
+                jl1 = new JLabel(account_string, SwingConstants.CENTER);
             }
             catch (InterruptedException e) {
                 return;
