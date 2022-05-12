@@ -196,8 +196,8 @@ class ButtonMakeMoneyThread extends Thread {
         do {
             try {
                 Thread.currentThread().sleep(5000);
-                String account_string = String.valueOf(account[0]);
                 account[0] += 50;
+                String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
                 System.out.println(account[0]);
             }
