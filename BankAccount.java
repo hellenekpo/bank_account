@@ -320,14 +320,19 @@ class ThreadButton extends Thread {
     public void run() {
             do {
                 try {
-                    Thread.currentThread().sleep(1000);
-                    Random rand = new Random();
-                    float r = rand.nextFloat();
-                    float g = rand.nextFloat();
-                    float b = rand.nextFloat();
-                    Color rand_color = new Color(r, g, b);
-                    button.setBackground(rand_color);
-                    button.setOpaque(true);
+                    Thread.currentThread().sleep(3000);
+                                Random rand = new Random();
+                                float r = rand.nextFloat();
+                                float r1 = rand.nextFloat();
+                                float g = rand.nextFloat();
+                                float g2 = rand.nextFloat();
+                                float b = rand.nextFloat();
+                                float b3 = rand.nextFloat();
+                                Color rand_color = new Color(r, g, b);
+                                Color rand_color1 = new Color(r1, g2, b3);
+                                button.setBackground(rand_color);
+                                button.setForeground(rand_color1);
+                                button.setOpaque(true);
                 }
                 catch (InterruptedException e) {
                     return;
