@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
 import java.util.Random;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -35,13 +36,14 @@ public class BankAccount {
         //small jobs, and then tracking the transaction information. 
         //The three concepts we would like to use are
         //graphics, file i/o and thread concurrency.
-        System.out.println("hekllllo");
-        int [] account = new int[1];
+        int [] account = new int[1]; // had to place the account balance in an arry
+        //so that we could make references to it to update it after changes
         int [] transactions = new int[1000];
-        account[0] = 0;
-        ButtonMakeMoneyThread [] threads = new ButtonMakeMoneyThread[8];
- 
-        JFrame jf = new JFrame("Bank Account!");
+        // the aray thats going to hold the t
+        account[0] = 0; // initialize the account to 0
+        ButtonMakeMoneyThread [] threads = new ButtonMakeMoneyThread[1];
+        //the thread array for the threads
+        JFrame jf = new JFrame("Bank Account!"); //frame for the bank account
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1200, 800);
         jf.setResizable(true);
@@ -101,15 +103,106 @@ public class BankAccount {
                 threads, account,labels[0], labels[1]));
         buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
                 threads, account, labels[0], labels[1]));
+        buttons[2].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+        buttons[3].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+        buttons[4].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
         ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
                 labels[0], labels[1]);
         threads[0] = thread_a;
-        ButtonMakeMoneyThread thread_b = new ButtonMakeMoneyThread(buttons[0], account,
-                labels[0], labels[1]);
-        threads[1] = thread_b;
+
         
     }
     
+}
+
+class ButtonListenWindow implements ActionListener {
+    JButton [] buttons;
+    int [] account;
+    JLabel jl1;
+    ButtonListenWindow (JButton [] curr_buttons, int [] curr_balance,
+            JLabel curr_jl1) {
+        account = curr_balance;
+        buttons = curr_buttons;
+        jl1 = curr_jl1;
+    }
+    @Override
+    public void actionPerformed(ActionEvent arg0) {
+        JButton curr_button = (JButton) arg0.getSource();
+        if (curr_button == buttons[2]) {
+            //pay rent
+            if (account[0] < 1000) {
+                JFrame jf = new JFrame();
+                JOptionPane.showMessageDialog(jf, "You don't have enough to"
+                        + " pay rent!");
+                int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance?");
+                if (results == 0) {
+                    account[0] -= 1000;
+                    String account_string = String.valueOf(account[0]);
+                    jl1.setText(account_string);
+                }
+                else if (results == 1) {
+                JOptionPane.showMessageDialog(jf, "Clock back into work to make enough"
+                        + " to pay rent!");
+                }
+            }  
+            else {
+                account[0] -= 1000;
+                String account_string = String.valueOf(account[0]);
+                jl1.setText(account_string);
+            }
+        }
+        else if (curr_button == buttons[3]) {
+            //buy food
+            if (account[0] < 15) {
+                JFrame jf = new JFrame();
+                JOptionPane.showMessageDialog(jf, "You don't have enough to"
+                        + " buy food!");
+                int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance?");
+                if (results == 0) {
+                    JOptionPane.showMessageDialog(jf, "At least you're gonna"
+                            + " eat tonight...");
+                    account[0] -= 15;
+                    String account_string = String.valueOf(account[0]);
+                    jl1.setText(account_string);
+                }
+                else if (results == 1) {
+                JOptionPane.showMessageDialog(jf, "Clock back into work to make enough"
+                        + " to have dinner!");
+                }
+            }  
+            else {
+                account[0] -= 15;
+                String account_string = String.valueOf(account[0]);
+                jl1.setText(account_string);
+            }  
+        }
+        else if (curr_button == buttons[4]) {
+            //go party
+            if (account[0] < 20) {
+                JFrame jf = new JFrame();
+                JOptionPane.showMessageDialog(jf, "You don't have enough to"
+                        + " go PARTY!! What a bummer :(");
+                int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance"
+                        + " so that you can have fun tonight?");
+                if (results == 0) {
+                    JOptionPane.showMessageDialog(jf, "We're broke but we're "
+                            + "still gonna have fun!");
+                    account[0] -= 20;
+                    String account_string = String.valueOf(account[0]);
+                    jl1.setText(account_string);
+                }
+                else if (results == 1) {
+                JOptionPane.showMessageDialog(jf, "Clock back into work to make enough"
+                        + " to have fun next time!");
+                }
+            }  
+            else {
+                account[0] -= 20;
+                String account_string = String.valueOf(account[0]);
+                jl1.setText(account_string);
+            }
+        }
+    }
 }
 
 class ButtonListen implements ActionListener {
