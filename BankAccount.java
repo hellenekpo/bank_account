@@ -47,10 +47,10 @@ public class BankAccount {
         jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jf.setSize(1200, 800);
         jf.setResizable(true);
-        JButton [] buttons = new JButton[10];
-        boolean [] toggle = new boolean[10];
-        for (int i = 0; i < 8; ++i) {
-            toggle[i] = true;
+        JButton [] buttons = new JButton[6]; //the amount of buttons in an array
+        boolean [] toggle = new boolean[2]; //toggle array
+        for (int i = 0; i < 2; ++i) {
+            toggle[i] = true; // toggles for clocking in and out
         }
         JButton jb = new JButton("Welcome! Clock In");
         buttons[0] = jb;
@@ -81,11 +81,12 @@ public class BankAccount {
             buttons[i].setOpaque(true);
             buttons[i].setBorderPainted(false);
         }
+        //set buttons to be a random color, set the font of the buttons, etc etc
         JPanel jp = new JPanel();
         jp.setLayout(new GridLayout(4, 2));
         jf.add(jp);
         JLabel [] labels = new JLabel[2];
-        labels[0] = new JLabel("Hello, welcome!", SwingConstants.CENTER);
+        labels[0] = new JLabel("Hello, welcome!", SwingConstants.CENTER); //two labels for the top of the program
         labels[1] = new JLabel("This is your bank account!",
                 SwingConstants.CENTER);
         labels[0].setFont(new Font("monospaced", Font.BOLD, 50));
@@ -99,6 +100,10 @@ public class BankAccount {
         jp.add(buttons[4]);
         jp.add(buttons[5]);
         jf.setVisible(true);
+        for (int i = 2; i < 6; ++i) {
+            ThreadButton thread_b = new ThreadButton(buttons[i]);
+            thread_b.start();
+        }
         buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
                 threads, account,labels[0], labels[1]));
         buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
@@ -128,10 +133,10 @@ class ButtonListenWindow implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent arg0) {
         JButton curr_button = (JButton) arg0.getSource();
+        JFrame jf = new JFrame();
         if (curr_button == buttons[2]) {
             //pay rent
             if (account[0] < 1000) {
-                JFrame jf = new JFrame();
                 JOptionPane.showMessageDialog(jf, "You don't have enough to"
                         + " pay rent!");
                 int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance?");
@@ -149,12 +154,12 @@ class ButtonListenWindow implements ActionListener {
                 account[0] -= 1000;
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
+                JOptionPane.showMessageDialog(jf, "You've successfully paid rent!");
             }
         }
         else if (curr_button == buttons[3]) {
             //buy food
             if (account[0] < 15) {
-                JFrame jf = new JFrame();
                 JOptionPane.showMessageDialog(jf, "You don't have enough to"
                         + " buy food!");
                 int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance?");
@@ -174,12 +179,12 @@ class ButtonListenWindow implements ActionListener {
                 account[0] -= 15;
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
+                JOptionPane.showMessageDialog(jf, "You've successfully bought food!");
             }  
         }
         else if (curr_button == buttons[4]) {
             //go party
             if (account[0] < 20) {
-                JFrame jf = new JFrame();
                 JOptionPane.showMessageDialog(jf, "You don't have enough to"
                         + " go PARTY!! What a bummer :(");
                 int results = JOptionPane.showConfirmDialog(jf, "Do you want to have a negative balance"
@@ -200,6 +205,7 @@ class ButtonListenWindow implements ActionListener {
                 account[0] -= 20;
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
+                JOptionPane.showMessageDialog(jf, "You've bought a ticket to go out and party!");
             }
         }
     }
