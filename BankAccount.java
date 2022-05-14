@@ -119,7 +119,10 @@ public class BankAccount {
     }
     
 }
+//need to implement an action listener for printing bank statments 
 
+
+//these action listeners handles what to do if youre paying for food, buying 
 class ButtonListenWindow implements ActionListener {
     JButton [] buttons;
     int [] account;
