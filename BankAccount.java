@@ -1,7 +1,8 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Other/File.java to edit this template
  */
+
 package bankaccount;
 import java.awt.*;
 import java.awt.Color;
@@ -19,12 +20,19 @@ import java.awt.Dimension;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingConstants;
+import java.io.*;
+import java.io.File;  
+import java.io.IOException;  
+import java.io.FileWriter; 
+import java.util.Scanner; 
+
 /**
  *
  * @author hellenekpo
+ * @author bethanysaunders
  */
 public class BankAccount {
-
+    public static String strTransactions = "";
     /**
      * @param args the command line arguments
      */
@@ -36,9 +44,31 @@ public class BankAccount {
         //small jobs, and then tracking the transaction information. 
         //The three concepts we would like to use are
         //graphics, file i/o and thread concurrency.
+        
+            
+        
+        // Creating Bank Statement File
+        File statement;
+        try {
+            statement = new File("bankstatement.txt");
+            if (statement.createNewFile()) {
+                System.out.println("File created: " + statement.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+          } catch (IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+        }
+
         int [] account = new int[1]; // had to place the account balance in an arry
         //so that we could make references to it to update it after changes
         int [] transactions = new int[1000];
+        // Instantiating an array of string transactions
+        //String strTransactions = "";
+        
+        
+        
         // the aray thats going to hold the t
         account[0] = 0; // initialize the account to 0
         ButtonMakeMoneyThread [] threads = new ButtonMakeMoneyThread[1];
@@ -104,22 +134,20 @@ public class BankAccount {
             ThreadButton thread_b = new ThreadButton(buttons[i]);
             thread_b.start();
         }
-        buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
+            buttons[0].addActionListener(new ButtonListen(buttons, toggle, 
                 threads, account,labels[0], labels[1]));
-        buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
-                threads, account, labels[0], labels[1]));
-        buttons[2].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
-        buttons[3].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
-        buttons[4].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
-        ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
-                labels[0], labels[1]);
-        threads[0] = thread_a;
-
+            buttons[1].addActionListener(new ButtonListen(buttons, toggle, 
+                    threads, account, labels[0], labels[1]));
+            buttons[2].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+            buttons[3].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+            buttons[4].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+            buttons[5].addActionListener(new ButtonListenWindow(buttons, account, labels[1]));
+            ButtonMakeMoneyThread thread_a = new ButtonMakeMoneyThread(buttons[0], account,
+                    labels[0], labels[1]);
+            threads[0] = thread_a;
         
     }
-    
 }
-//need to implement an action listener for printing bank statments 
 
 
 //these action listeners handles what to do if youre paying for food, buying 
@@ -127,6 +155,13 @@ class ButtonListenWindow implements ActionListener {
     JButton [] buttons;
     int [] account;
     JLabel jl1;
+    //String transactions;
+    File fileStatement;
+    FileWriter myWriter;
+    PrintWriter writer;
+    File myObj = new File("bankstatement.txt");
+
+     
     ButtonListenWindow (JButton [] curr_buttons, int [] curr_balance,
             JLabel curr_jl1) {
         account = curr_balance;
@@ -137,7 +172,8 @@ class ButtonListenWindow implements ActionListener {
     public void actionPerformed(ActionEvent arg0) {
         JButton curr_button = (JButton) arg0.getSource();
         JFrame jf = new JFrame();
-        if (curr_button == buttons[2]) {
+
+            if (curr_button == buttons[2]) {
             //pay rent
             if (account[0] < 1000) {
                 JOptionPane.showMessageDialog(jf, "You don't have enough to"
@@ -158,6 +194,8 @@ class ButtonListenWindow implements ActionListener {
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
                 JOptionPane.showMessageDialog(jf, "You've successfully paid rent!");
+                BankAccount.strTransactions += "Rent Balance Paid : " + account_string + "\n";
+                System.out.println("Successfully wrote to the file.");
             }
         }
         else if (curr_button == buttons[3]) {
@@ -183,6 +221,8 @@ class ButtonListenWindow implements ActionListener {
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
                 JOptionPane.showMessageDialog(jf, "You've successfully bought food!");
+                BankAccount.strTransactions += "Food Balance Paid : " + account_string + "\n";
+                System.out.println("Successfully wrote to the file.");
             }  
         }
         else if (curr_button == buttons[4]) {
@@ -209,8 +249,24 @@ class ButtonListenWindow implements ActionListener {
                 String account_string = String.valueOf(account[0]);
                 jl1.setText(account_string);
                 JOptionPane.showMessageDialog(jf, "You've bought a ticket to go out and party!");
+                BankAccount.strTransactions += "Party Balance Paid : " + account_string + "\n";
+                System.out.println("Successfully wrote to the file.");
             }
         }
+        else if (curr_button == buttons[5]) {
+            BankAccount.strTransactions += "Account Balance: " + account[0] + "\n";
+            try {  
+            //myWriter = new FileWriter("bankstatement.txt");
+            PrintWriter writer = new PrintWriter("bankstatement.txt", "UTF-8");
+            writer.write(BankAccount.strTransactions);
+            writer.close();
+            JOptionPane.showMessageDialog(jf, BankAccount.strTransactions);
+        }
+        catch(IOException e) {
+                System.out.println("An error occurred.");
+                e.printStackTrace();
+        }
+        }        
     }
 }
 
@@ -345,3 +401,4 @@ class ThreadButton extends Thread {
       
     }
 }
+
