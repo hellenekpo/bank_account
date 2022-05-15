@@ -1,0 +1,5 @@
+Food Balance Paid : 35
+Party Balance Paid : 15
+Account Balance: 65
+Rent Balance Paid : 65
+Account Balance: 115
